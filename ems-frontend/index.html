@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ajax 1 - Text File</title> -->
+</head>
+
+<body>
+    <!-- <script src="frontend.js">
+    </script> -->
+    <div>
+        <h2>Get all employees details</h2>
+        <button id="buttongetall">Get all the records</button>
+        <div id="displayall"></div>
+        <script>
+            document.getElementById('buttongetall').addEventListener('click', getAllUsers);
+            function getAllUsers() {
+
+                var url = "http://localhost:8080/api/employees";
+                var xhr = new XMLHttpRequest()
+                xhr.open('GET', url, true)
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        console.table(users);
+                        var all_employees = JSON.parse(xhr.responseText);
+                        var output = '';
+                        for (var i in all_employees) {
+                            output += '<ul>' +
+                                '<li>ID: ' + all_employees[i].id + '</li>' +
+                                '<li>First Name: ' + all_employees[i].firstName + '</li>' +
+                                '<li>Last Name: ' + all_employees[i].lastName + '</li>' +
+                                '<li>Email: ' + all_employees[i].email + '</li>' +
+                                '</ul>';
+                        }
+                        document.getElementById('displayall').innerHTML = output;
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(null);
+
+
+            }
+        </script>
+    </div>
+
+    <div>
+        <h2>Get specific employee details</h2>
+        <!-- <button id="buttongetspecific">Get specific record</button> -->
+        <form id="frm1">
+            Enter employees userId: <input type="text" name="fname" id="uidInput">
+            <input type="button" onclick="getSpecificUser()" value="Submit">
+            <div id="displayspecific"></div>
+        </form>
+        <script>
+            // document.getElementById('buttongetspecific').addEventListener('click', getSpecificUser);
+            function getSpecificUser() {
+
+                var url = "http://localhost:8080/api/employees/";
+                var xhr = new XMLHttpRequest()
+                var userIdInput = document.getElementById('uidInput').value;
+                xhr.open('GET', url + userIdInput, true)//take user id from the user and display it
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        // console.table(users);
+                        var specific_employee = JSON.parse(xhr.responseText);
+                        var output_specific = '';
+                        // for (var i in all_employees) {
+                        output_specific += '<ul>' +
+                            '<li>ID: ' + specific_employee.id + '</li>' +
+                            '<li>First Name: ' + specific_employee.firstName + '</li>' +
+                            '<li>Last Name: ' + specific_employee.lastName + '</li>' +
+                            '<li>Email: ' + specific_employee.email + '</li>' +
+                            '</ul>';
+                        // }
+                        document.getElementById('displayspecific').innerHTML = output_specific;
+
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(null);
+
+
+            }
+        </script>
+    </div>
+
+
+
+
+
+
+    <div>
+        <h2>Update employee details</h2>
+        <!-- <button id="updateemployee">Get all the records</button> -->
+
+        <form id="frm132">
+            Enter employees userId whose details you want to update:<br>
+            <br>User ID: <input type="text" name="fname" id="toUpdateUserId"> 
+            <br>First Name: <input type="text" name="fname" id="fnameInput">
+            <br>Last Name:<input type="text" name="lname" id="lnameInput">
+            <br> Email:<input type="text" name="emai" id="emailInput">
+            <br> <input type="button" onclick="updateUser()" value="Submit">
+            <div id="updatedata"></div>
+        </form>
+<script>
+            // document.getElementById('buttongetspecific').addEventListener('click', getSpecificUser);
+            function updateUser() {
+
+                var url = "http://localhost:8080/api/employees/";
+                var uid=document.getElementById('toUpdateUserId').value;
+                // var deleteIdInput = document.getElementById('deleteInput').value;
+                var data = {};
+                data.firstName =document.getElementById('fnameInput').value;
+                data.lastName = document.getElementById('lnameInput').value;
+                data.email=document.getElementById('emailInput').value;
+                var json = JSON.stringify(data);
+                var xhr = new XMLHttpRequest();
+                xhr.open("PUT", url+uid, true);
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        var updateSpecific = '';
+                        updateSpecific += '<ul>' +" for user:" +uid +
+                            '<li>ID: ' + data.firstName + '</li>' +
+                            '<li>First Name: ' + data.lastName + '</li>' +
+                            '<li>Last Name: ' + data.email + '</li>' + "Data updated successfully"
+                            '</ul>';
+                        // }
+                        document.getElementById('updatedata').innerHTML = updateSpecific;
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(json);
+
+
+            }
+        </script>
+    </div>
+
+
+
+
+
+    <div>
+        <h2>Delete using employee id</h2>
+        <!-- <button id="buttondelete">Delete specific employee</button> -->
+
+        <form id="frm2">
+            Enter employees userId to delete from the database: <input type="text" name="fname" id="deleteInput">
+            <input type="button" onclick="deleteSpecificUser()" value="Submit">
+            <div id="deletespecific"></div>
+        </form>
+        <script>
+            // document.getElementById('buttongetspecific').addEventListener('click', getSpecificUser);
+            function deleteSpecificUser() {
+
+                var url = "http://localhost:8080/api/employees/";
+                var xhr = new XMLHttpRequest()
+                var deleteIdInput = document.getElementById('deleteInput').value;
+                xhr.open('DELETE', url + deleteIdInput, true)//take user id from the user and display it
+                xhr.onload = function () {
+                    // var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        // console.table(users);
+                        // var specific_employee = JSON.parse(xhr.responseText);
+                        var output_specific = '';
+                        // for (var i in all_employees) {
+                        output_specific += 'User ID: ' + deleteIdInput + ' removed successfully';
+                        // }
+                        document.getElementById('deletespecific').innerHTML = output_specific;
+
+                        console.log("User ID: " + deleteIdInput + " deleted successfully");
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(null);
+
+
+            }
+        </script>
+    </div>
+
+
+
+
+
+    <div>
+        <h2>Create new record</h2>
+
+        <form id="frm3">
+            Enter employees userId to create in the database:<br>First Name: <input type="text" name="fname" id="fnameInput">
+            <br>Last Name:<input type="text" name="lname" id="lnameInput">
+            <br> Email:<input type="text" name="emai" id="emailInput">
+            <br> <input type="button" onclick="createUser()" value="Submit">
+            <div id="createdata"></div>
+        </form>
+        <!-- <button id="buttoncreate">Get all the records</button> -->
+        <script>
+            // document.getElementById('buttongetspecific').addEventListener('click', getSpecificUser);
+            function createUser() {
+
+                var url = "http://localhost:8080/api/employees";
+                // var deleteIdInput = document.getElementById('deleteInput').value;
+                var data = {};
+                data.firstName =document.getElementById('fnameInput').value;
+                data.lastName = document.getElementById('lnameInput').value;
+                data.email=document.getElementById('emailInput').value;
+                var json = JSON.stringify(data);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.onload = function () {
+                    var users = JSON.parse(xhr.responseText);
+                    if (xhr.readyState == 4 && xhr.status == "200") {
+                        var createSpecific = '';
+                        createSpecific += '<ul>' +
+                            '<li>ID: ' + data.firstName + '</li>' +
+                            '<li>First Name: ' + data.lastName + '</li>' +
+                            '<li>Last Name: ' + data.email + '</li>' + "Data inserted successfully"
+                            '</ul>';
+                        // }
+                        document.getElementById('createdata').innerHTML = createSpecific;
+                        console.table(users);
+                    } else {
+                        console.error(users);
+                    }
+                }
+                xhr.send(json);
+
+
+            }
+        </script>
+    </div>
+</body>
+
+</html>

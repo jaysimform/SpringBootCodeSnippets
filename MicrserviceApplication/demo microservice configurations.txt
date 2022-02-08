@@ -1,0 +1,2 @@
+user service port: 9001
+contact service port: 9002

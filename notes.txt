@@ -1,0 +1,8 @@
+groupname.artifactname becomes the package name 
+
+create few of the main packages to create the classes:
+models package to create the model
+service package, controller package and configuration package
+
+com.dailycodebuffer.jwt.model
+com.onlinebiddingapplication.backend.model 
